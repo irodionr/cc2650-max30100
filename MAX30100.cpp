@@ -15,7 +15,7 @@ void taskFxn(UArg arg0, UArg arg1)
     I2C_Params_init(&i2cParams);
     i2c = I2C_open(CC2650STK_I2C0, &i2cParams);
     if (i2c == NULL){ System_printf("I2C initialization error\n"); }
-    else { System_printf("\nSERVICE: I2C initialized\n\n"); }
+    else { System_printf("I2C initialized\n\n"); }
 
     /* === READ & WRITE === */
     readFrom(MAX30100_PART_ID, txBuffer, rxBuffer, &i2cTransaction, &i2c);
@@ -33,11 +33,11 @@ void taskFxn(UArg arg0, UArg arg1)
     if (rxBuffer[0]==0x10) { System_printf("Brightness level 3\n"); }
     if (rxBuffer[0]==0x11) { System_printf("Brightness level 4\n"); }
     writeTo(MAX30100_LED_CONFIG, 0xFF, txBuffer, rxBuffer, &i2cTransaction, &i2c);         //selected 50 mA & 50 mA
-    readFrom(MAX30100_LED_CONFIG, txBuffer, rxBuffer, &i2cTransaction, &i2c);              //придумать как использовать enum
+    readFrom(MAX30100_LED_CONFIG, txBuffer, rxBuffer, &i2cTransaction, &i2c);              //how to use enum?
 
     /* === I2C Closing === */
     I2C_close(i2c);
-    System_printf("\nSERVICE: I2C Closed\n");
+    System_printf("\nI2C Closed\n");
     System_flush();
 }
 
@@ -62,12 +62,11 @@ int main(void)
     /* Open LED pins */
     ledPinHandle = PIN_open(&ledPinState, ledPinTable);
     if(!ledPinHandle) {
-        System_abort("\nLED pins initialization error\n");
+        System_abort("LED pins initialization error\n");
     }
 
     PIN_setOutputValue(ledPinHandle, Board_LED1, 1);
 
-//    System_printf("\nProgram started successfully\n");
     System_flush();
 
     BIOS_start();
