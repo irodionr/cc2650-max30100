@@ -33,7 +33,7 @@ void taskFxn(UArg arg0, UArg arg1)
     if (rxBuffer[0]==0x10) { System_printf("Brightness level 3\n"); }
     if (rxBuffer[0]==0x11) { System_printf("Brightness level 4\n"); }
     writeTo(MAX30100_LED_CONFIG, 0xFF, txBuffer, rxBuffer, &i2cTransaction, &i2c);         //selected 50 mA & 50 mA
-    readFrom(MAX30100_LED_CONFIG, txBuffer, rxBuffer, &i2cTransaction, &i2c);              //how to use enum?
+    readFrom(MAX30100_LED_CONFIG, txBuffer, rxBuffer, &i2cTransaction, &i2c);              //ISSUES #1
 
     /* === I2C Closing === */
     I2C_close(i2c);
