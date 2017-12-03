@@ -9,7 +9,6 @@ CFG_SRCS += \
 ../MAX30100.cfg 
 
 CPP_SRCS += \
-../Disabled.cpp \
 ../MAX30100.cpp 
 
 CMD_SRCS += \
@@ -38,12 +37,10 @@ GEN_OPTS += \
 
 OBJS += \
 ./CC2650STK.obj \
-./Disabled.obj \
 ./MAX30100.obj \
 ./ccfg.obj 
 
 CPP_DEPS += \
-./Disabled.d \
 ./MAX30100.d 
 
 GEN_MISC_DIRS__QUOTED += \
@@ -51,7 +48,6 @@ GEN_MISC_DIRS__QUOTED += \
 
 OBJS__QUOTED += \
 "CC2650STK.obj" \
-"Disabled.obj" \
 "MAX30100.obj" \
 "ccfg.obj" 
 
@@ -60,7 +56,6 @@ C_DEPS__QUOTED += \
 "ccfg.d" 
 
 CPP_DEPS__QUOTED += \
-"Disabled.d" \
 "MAX30100.d" 
 
 GEN_FILES__QUOTED += \
@@ -72,7 +67,6 @@ C_SRCS__QUOTED += \
 "../ccfg.c" 
 
 CPP_SRCS__QUOTED += \
-"../Disabled.cpp" \
 "../MAX30100.cpp" 
 
 

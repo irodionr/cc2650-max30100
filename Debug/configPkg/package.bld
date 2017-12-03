@@ -11,7 +11,7 @@ var makeAssembly = false;
 var Executable = xdc.module('xdc.bld.Executable');
 
 var exeOpts = new Executable.Attrs({
-        cfgScript: 'D:/CCS/workspace_v7/i2ctmp007_CC2650STK_TI/MAX30100.cfg',
+        cfgScript: 'D:/CCS/workspace_v7/i2ctmp007_CC2650STK_TI_old/MAX30100.cfg',
         profile: 'release',
         cfgHome: 'configPkg',
 });
@@ -41,7 +41,7 @@ else {
 
 var thisObj = {
     cfg:        '../MAX30100.cfg',
-    outputPath: 'D:/CCS/workspace_v7/i2ctmp007_CC2650STK_TI/Debug/configPkg',
+    outputPath: 'D:/CCS/workspace_v7/i2ctmp007_CC2650STK_TI_old/Debug/configPkg',
     exeName:    'MAX30100' + suffix,
     exeIntName: 'MAX30100' + suffix.replace('.', '_'),
     targ:       targ,

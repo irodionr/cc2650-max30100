@@ -11,7 +11,6 @@ GEN_CMDS__FLAG := -l"configPkg/linker.cmd"
 
 ORDERED_OBJS += \
 "./CC2650STK.obj" \
-"./Disabled.obj" \
 "./MAX30100.obj" \
 "./ccfg.obj" \
 "../CC2650STK.cmd" \
@@ -158,9 +157,9 @@ i2ctmp007_CC2650STK_TI.hex: $(EXE_OUTPUTS)
 clean:
 	-$(RM) $(GEN_CMDS__QUOTED)$(GEN_MISC_FILES__QUOTED)$(BIN_OUTPUTS__QUOTED)$(GEN_FILES__QUOTED)$(EXE_OUTPUTS__QUOTED)$(GEN_OPTS__QUOTED)
 	-$(RMDIR) $(GEN_MISC_DIRS__QUOTED)
-	-$(RM) "CC2650STK.obj" "Disabled.obj" "MAX30100.obj" "ccfg.obj" 
+	-$(RM) "CC2650STK.obj" "MAX30100.obj" "ccfg.obj" 
 	-$(RM) "CC2650STK.d" "ccfg.d" 
-	-$(RM) "Disabled.d" "MAX30100.d" 
+	-$(RM) "MAX30100.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 
