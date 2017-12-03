@@ -1,5 +1,5 @@
 #include "MAX30100.h"
-#include "R_W.h"
+#include "lib/MAXLIB/R_W.h"
 
 void taskFxn(UArg arg0, UArg arg1)
 {

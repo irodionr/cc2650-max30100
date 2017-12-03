@@ -123,5 +123,7 @@ GEN_OPTS__QUOTED :=
 
 # Every subdirectory with source files must be described here
 SUBDIRS := \
-. \
+lib/Board \
+lib/HR_functions \
+lib/MAX30100 \
 

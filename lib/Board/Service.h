@@ -15,7 +15,7 @@
 #include <ti/drivers/I2C.h>
 
 /* Example/Board Header files */
-#include "Board.h"
+#include "lib/Board/Board.h"
 #include <stdio.h>
 
 #define TASKSTACKSIZE 1024

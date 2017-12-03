@@ -10,10 +10,11 @@ GEN_OPTS__FLAG := --cmd_file="configPkg/compiler.opt"
 GEN_CMDS__FLAG := -l"configPkg/linker.cmd"
 
 ORDERED_OBJS += \
-"./CC2650STK.obj" \
-"./MAX30100.obj" \
-"./ccfg.obj" \
-"../CC2650STK.cmd" \
+"./lib/Board/CC2650STK.obj" \
+"./lib/Board/ccfg.obj" \
+"./lib/HR_functions/HR_functions.obj" \
+"./lib/MAX30100/MAX30100.obj" \
+"../lib/Board/CC2650STK.cmd" \
 $(GEN_CMDS__FLAG) \
 -l"C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/cc26xxware_2_24_03_17272/driverlib/bin/ccs/driverlib.lib" \
 -llibc.a \
@@ -25,8 +26,12 @@ RMDIR := RMDIR /S/Q
 
 # All of the sources participating in the build are defined here
 -include sources.mk
--include subdir_vars.mk
--include subdir_rules.mk
+-include lib/Board/subdir_vars.mk
+-include lib/HR_functions/subdir_vars.mk
+-include lib/MAX30100/subdir_vars.mk
+-include lib/Board/subdir_rules.mk
+-include lib/HR_functions/subdir_rules.mk
+-include lib/MAX30100/subdir_rules.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -157,9 +162,9 @@ i2ctmp007_CC2650STK_TI.hex: $(EXE_OUTPUTS)
 clean:
 	-$(RM) $(GEN_CMDS__QUOTED)$(GEN_MISC_FILES__QUOTED)$(BIN_OUTPUTS__QUOTED)$(GEN_FILES__QUOTED)$(EXE_OUTPUTS__QUOTED)$(GEN_OPTS__QUOTED)
 	-$(RMDIR) $(GEN_MISC_DIRS__QUOTED)
-	-$(RM) "CC2650STK.obj" "MAX30100.obj" "ccfg.obj" 
-	-$(RM) "CC2650STK.d" "ccfg.d" 
-	-$(RM) "MAX30100.d" 
+	-$(RM) "lib\Board\CC2650STK.obj" "lib\Board\ccfg.obj" "lib\HR_functions\HR_functions.obj" "lib\MAX30100\MAX30100.obj" 
+	-$(RM) "lib\Board\CC2650STK.d" "lib\Board\ccfg.d" 
+	-$(RM) "lib\HR_functions\HR_functions.d" "lib\MAX30100\MAX30100.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

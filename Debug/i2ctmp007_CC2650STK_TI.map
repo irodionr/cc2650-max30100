@@ -1,7 +1,7 @@
 ******************************************************************************
                   TI ARM Linker PC v16.9.4                     
 ******************************************************************************
->> Linked Sun Dec 03 22:32:35 2017
+>> Linked Sun Dec 03 23:42:44 2017
 
 OUTPUT FILE NAME:   <i2ctmp007_CC2650STK_TI.out>
 ENTRY POINT SYMBOL: "ResetISR"  address: 000035d9
@@ -1058,12 +1058,16 @@ MODULE SUMMARY
 
        Module                            code    ro data   rw data
        ------                            ----    -------   -------
-    .\
-       MAX30100.obj                      918     0         1128   
+    .\lib\Board\
        CC2650STK.obj                     0       176       224    
        ccfg.obj                          0       88        0      
     +--+---------------------------------+-------+---------+---------+
-       Total:                            918     264       1352   
+       Total:                            0       264       224    
+                                                                  
+    .\lib\MAX30100\
+       MAX30100.obj                      918     0         1128   
+    +--+---------------------------------+-------+---------+---------+
+       Total:                            918     0         1128   
                                                                   
     D:\Repo\MAX\Debug\configPkg\package\cfg\
        MAX30100_pem3.oem3                706     1487      2866   
@@ -1137,7 +1141,7 @@ MODULE SUMMARY
     +--+---------------------------------+-------+---------+---------+
        Total:                            68      0         0      
                                                                   
-    D:\Repo\MAX\src\sysbios\rom_sysbios.aem3
+    D:\Repo\MAX\lib\Board\src\sysbios\rom_sysbios.aem3
        rom_sysbios.obj                   2519    0         0      
        rom_sysbios_config.obj            26      0         0      
     +--+---------------------------------+-------+---------+---------+

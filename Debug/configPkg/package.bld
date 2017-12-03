@@ -11,7 +11,7 @@ var makeAssembly = false;
 var Executable = xdc.module('xdc.bld.Executable');
 
 var exeOpts = new Executable.Attrs({
-        cfgScript: 'D:/Repo/MAX/MAX30100.cfg',
+        cfgScript: 'D:/Repo/MAX/lib/Board/MAX30100.cfg',
         profile: 'release',
         cfgHome: 'configPkg',
 });
@@ -40,7 +40,7 @@ else {
 }
 
 var thisObj = {
-    cfg:        '../MAX30100.cfg',
+    cfg:        '../lib/Board/MAX30100.cfg',
     outputPath: 'D:/Repo/MAX/Debug/configPkg',
     exeName:    'MAX30100' + suffix,
     exeIntName: 'MAX30100' + suffix.replace('.', '_'),

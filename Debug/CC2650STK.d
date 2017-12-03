@@ -187,7 +187,7 @@ CC2650STK.obj: C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/bios_6_46_01_37/pa
 CC2650STK.obj: C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/bios_6_46_01_37/packages/ti/sysbios/knl/package/Clock_TimerProxy.h
 CC2650STK.obj: C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/cc26xxware_2_24_03_17272/driverlib/udma.h
 CC2650STK.obj: C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/cc26xxware_2_24_03_17272/inc/hw_udma.h
-CC2650STK.obj: D:/Repo/MAX/Board.h
+CC2650STK.obj: D:/Repo/MAX/lib/Board/Board.h
 CC2650STK.obj: D:/Repo/MAX/CC2650STK.h
 CC2650STK.obj: C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/tidrivers_cc13xx_cc26xx_2_21_00_04/packages/ti/drivers/UART.h
 CC2650STK.obj: C:/ti7/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/stddef.h
@@ -472,7 +472,7 @@ C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/bios_6_46_01_37/packages/ti/sysbi
 C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/bios_6_46_01_37/packages/ti/sysbios/knl/package/Clock_TimerProxy.h: 
 C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/cc26xxware_2_24_03_17272/driverlib/udma.h: 
 C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/cc26xxware_2_24_03_17272/inc/hw_udma.h: 
-D:/Repo/MAX/Board.h: 
+D:/Repo/MAX/lib/Board/Board.h: 
 D:/Repo/MAX/CC2650STK.h: 
 C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/tidrivers_cc13xx_cc26xx_2_21_00_04/packages/ti/drivers/UART.h: 
 C:/ti7/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/stddef.h: 

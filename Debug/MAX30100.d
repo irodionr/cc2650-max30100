@@ -2,7 +2,7 @@
 
 MAX30100.obj: ../MAX30100.cpp
 MAX30100.obj: ../MAX30100.h
-MAX30100.obj: ../Service.h
+MAX30100.obj: ../lib/Board/Service.h
 MAX30100.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/std.h
 MAX30100.obj: C:/ti7/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/stdarg.h
 MAX30100.obj: C:/ti7/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/stddef.h
@@ -165,11 +165,11 @@ MAX30100.obj: C:/ti7/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/stdbool.
 MAX30100.obj: C:/ti7/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/stddef.h
 MAX30100.obj: C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/tidrivers_cc13xx_cc26xx_2_21_00_04/packages/ti/drivers/I2C.h
 MAX30100.obj: C:/ti7/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/stddef.h
-MAX30100.obj: ../Board.h
+MAX30100.obj: D:/Repo/MAX/lib/Board/Board.h
 MAX30100.obj: C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/tidrivers_cc13xx_cc26xx_2_21_00_04/packages/ti/drivers/Power.h
 MAX30100.obj: C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/tidrivers_cc13xx_cc26xx_2_21_00_04/packages/ti/drivers/utils/List.h
 MAX30100.obj: C:/ti7/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/stddef.h
-MAX30100.obj: ../CC2650STK.h
+MAX30100.obj: D:/Repo/MAX/lib/Board/CC2650STK.h
 MAX30100.obj: C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/cc26xxware_2_24_03_17272/driverlib/ioc.h
 MAX30100.obj: C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/cc26xxware_2_24_03_17272/inc/hw_types.h
 MAX30100.obj: C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/cc26xxware_2_24_03_17272/inc/hw_chip_def.h
@@ -191,7 +191,7 @@ MAX30100.obj: ../R_W.h
 
 ../MAX30100.cpp: 
 ../MAX30100.h: 
-../Service.h: 
+../lib/Board/Service.h: 
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/std.h: 
 C:/ti7/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/stdarg.h: 
 C:/ti7/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/stddef.h: 
@@ -354,11 +354,11 @@ C:/ti7/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/stdbool.h:
 C:/ti7/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/stddef.h: 
 C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/tidrivers_cc13xx_cc26xx_2_21_00_04/packages/ti/drivers/I2C.h: 
 C:/ti7/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/stddef.h: 
-../Board.h: 
+D:/Repo/MAX/lib/Board/Board.h: 
 C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/tidrivers_cc13xx_cc26xx_2_21_00_04/packages/ti/drivers/Power.h: 
 C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/tidrivers_cc13xx_cc26xx_2_21_00_04/packages/ti/drivers/utils/List.h: 
 C:/ti7/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/stddef.h: 
-../CC2650STK.h: 
+D:/Repo/MAX/lib/Board/CC2650STK.h: 
 C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/cc26xxware_2_24_03_17272/driverlib/ioc.h: 
 C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/cc26xxware_2_24_03_17272/inc/hw_types.h: 
 C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/cc26xxware_2_24_03_17272/inc/hw_chip_def.h: 
