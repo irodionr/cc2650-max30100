@@ -3,13 +3,16 @@
 
 #include "lib/Board/Service.h"
 
+//Address
+#define MAX30100_ADDRESS        0x57  // 8bit address converted to 7bit
+
 // Registers
 #define MAX30100_INT_STATUS     0x00  // Which interrupts are tripped
 #define MAX30100_INT_ENABLE     0x01  // Which interrupts are active
 #define MAX30100_FIFO_WR_PTR    0x02  // Where data is being written
 #define MAX30100_OVRFLOW_CTR    0x03  // Number of lost samples
 #define MAX30100_FIFO_RD_PTR    0x04  // Where to read from
-#define MAX30100_FIFO_DATA      0x05  // Ouput data buffer
+#define MAX30100_FIFO_DATA      0x05  // Output data buffer
 #define MAX30100_MODE_CONFIG    0x06  // Control register
 #define MAX30100_SPO2_CONFIG    0x07  // Oximetry settings
 #define MAX30100_LED_CONFIG     0x09  // Pulse width and power of LEDs
@@ -18,11 +21,10 @@
 #define MAX30100_REV_ID         0xFE  // Part revision
 #define MAX30100_PART_ID        0xFF  // Part ID, normally 0x11
 
-#define MAX30100_ADDRESS        0x57  // 8bit address converted to 7bit
-
-#define MAX30100_HR_ON          0x2   // HR only enabled
-#define MAX30100_SPO2_ON        0x3   // SPO2 enabled
-
+typedef enum {
+  HR_mode = 0x02,       // IR only
+  SPO2_mode = 0x03      // RED and IR
+} modeControl;
 
 typedef enum{ // This is the same for both LEDs
   pw200,    // 200us pulse
@@ -50,6 +52,7 @@ typedef enum{
   i14,   // 14.2mA
   i17,   // 17.4mA
   i21,   // 20.8mA
+  i24,   // 24 mA
   i27,   // 27.1mA
   i31,   // 30.6mA
   i34,   // 33.8mA

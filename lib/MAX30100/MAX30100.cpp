@@ -22,7 +22,7 @@ void taskFxn(UArg arg0, UArg arg1)
     System_printf("Part ID: 0x%x\n", rxBuffer[0]);
     readFrom(MAX30100_REV_ID, txBuffer, rxBuffer, &i2cTransaction, &i2c);
     System_printf("Rev ID: 0x%x\n", rxBuffer[0]);
-    writeTo(MAX30100_MODE_CONFIG, MAX30100_SPO2_ON, txBuffer, rxBuffer, &i2cTransaction, &i2c);
+    writeTo(MAX30100_MODE_CONFIG, SPO2_mode, txBuffer, rxBuffer, &i2cTransaction, &i2c);
     readFrom(MAX30100_MODE_CONFIG, txBuffer, rxBuffer, &i2cTransaction, &i2c);
     if (rxBuffer[0]==0x2) { System_printf("HR only enabled\n"); }
     if (rxBuffer[0]==0x3) { System_printf("SPO2 enabled\n"); }
