@@ -184,6 +184,9 @@ MAX30100.obj: C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/cc26xxware_2_24_03_
 MAX30100.obj: C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/cc26xxware_2_24_03_17272/driverlib/rom.h
 MAX30100.obj: C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/cc26xxware_2_24_03_17272/driverlib/gpio.h
 MAX30100.obj: C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/cc26xxware_2_24_03_17272/inc/hw_gpio.h
+MAX30100.obj: C:/ti7/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/stdio.h
+MAX30100.obj: C:/ti7/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/linkage.h
+MAX30100.obj: C:/ti7/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/stdarg.h
 MAX30100.obj: ../R_W.h
 
 ../MAX30100.cpp: 
@@ -370,4 +373,7 @@ C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/cc26xxware_2_24_03_17272/inc/hw_c
 C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/cc26xxware_2_24_03_17272/driverlib/rom.h: 
 C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/cc26xxware_2_24_03_17272/driverlib/gpio.h: 
 C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/cc26xxware_2_24_03_17272/inc/hw_gpio.h: 
+C:/ti7/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/stdio.h: 
+C:/ti7/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/linkage.h: 
+C:/ti7/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/stdarg.h: 
 ../R_W.h: 

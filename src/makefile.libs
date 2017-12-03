@@ -1,6 +1,6 @@
 #
 # This file was generated based on the configuration script:
-#     D:\CCS\workspace_v7\i2ctmp007_CC2650STK_TI_old\MAX30100.cfg
+#     D:\Repo\MAX\MAX30100.cfg
 #
 # This makefile may be included in other makefiles that need to build
 # the libraries containing the compiled source files generated as
@@ -14,7 +14,7 @@
 #
 # The absolute path to the generated source directory (at the time the
 # sources were generated) is:
-#    D:\CCS\workspace_v7\i2ctmp007_CC2650STK_TI_old\src
+#    D:\Repo\MAX\src
 #
 GEN_SRC_DIR ?= ../src
 

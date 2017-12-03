@@ -16,6 +16,7 @@
 
 /* Example/Board Header files */
 #include "Board.h"
+#include <stdio.h>
 
 #define TASKSTACKSIZE 1024
 
