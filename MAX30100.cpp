@@ -28,10 +28,10 @@ void taskFxn(UArg arg0, UArg arg1)
     if (rxBuffer[0]==0x3) { System_printf("SPO2 enabled\n"); }
     writeTo(MAX30100_SPO2_CONFIG, pw200, txBuffer, rxBuffer, &i2cTransaction, &i2c);
     readFrom(MAX30100_SPO2_CONFIG, txBuffer, rxBuffer, &i2cTransaction, &i2c);
-    if (rxBuffer[0]==0x00) { System_printf("Brightness level 1\n"); }
-    if (rxBuffer[0]==0x01) { System_printf("Brightness level 2\n"); }
-    if (rxBuffer[0]==0x10) { System_printf("Brightness level 3\n"); }
-    if (rxBuffer[0]==0x11) { System_printf("Brightness level 4\n"); }
+    if (rxBuffer[0]==0x0) { System_printf("Brightness level 1\n"); }
+    if (rxBuffer[0]==0x1) { System_printf("Brightness level 2\n"); }
+    if (rxBuffer[0]==0x2) { System_printf("Brightness level 3\n"); }
+    if (rxBuffer[0]==0x3) { System_printf("Brightness level 4\n"); }
     writeTo(MAX30100_LED_CONFIG, 0xFF, txBuffer, rxBuffer, &i2cTransaction, &i2c);         //selected 50 mA & 50 mA
     readFrom(MAX30100_LED_CONFIG, txBuffer, rxBuffer, &i2cTransaction, &i2c);              //ISSUES #1
 

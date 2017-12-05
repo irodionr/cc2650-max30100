@@ -13,6 +13,11 @@ ORDERED_OBJS += \
 "./CC2650STK.obj" \
 "./MAX30100.obj" \
 "./ccfg.obj" \
+"../lib/Board/src/sysbios/m3_Hwi_asm.obj" \
+"../lib/Board/src/sysbios/m3_Hwi_asm_switch.obj" \
+"../lib/Board/src/sysbios/m3_IntrinsicsSupport_asm.obj" \
+"../lib/Board/src/sysbios/m3_TaskSupport_asm.obj" \
+"../lib/Board/src/sysbios/rom_sysbios.obj" \
 "../CC2650STK.cmd" \
 $(GEN_CMDS__FLAG) \
 -l"C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/cc26xxware_2_24_03_17272/driverlib/bin/ccs/driverlib.lib" \
@@ -26,7 +31,9 @@ RMDIR := RMDIR /S/Q
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include subdir_vars.mk
+-include lib/Board/src/sysbios/subdir_vars.mk
 -include subdir_rules.mk
+-include lib/Board/src/sysbios/subdir_rules.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
