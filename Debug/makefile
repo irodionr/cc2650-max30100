@@ -10,11 +10,23 @@ GEN_OPTS__FLAG := --cmd_file="configPkg/compiler.opt"
 GEN_CMDS__FLAG := -l"configPkg/linker.cmd"
 
 ORDERED_OBJS += \
+<<<<<<< Updated upstream
 "./lib/Board/CC2650STK.obj" \
 "./lib/Board/ccfg.obj" \
 "./lib/HR_functions/HR_functions.obj" \
 "./lib/MAX30100/MAX30100.obj" \
 "../lib/Board/CC2650STK.cmd" \
+=======
+"./CC2650STK.obj" \
+"./MAX30100.obj" \
+"./ccfg.obj" \
+"../lib/Board/src/sysbios/m3_Hwi_asm.obj" \
+"../lib/Board/src/sysbios/m3_Hwi_asm_switch.obj" \
+"../lib/Board/src/sysbios/m3_IntrinsicsSupport_asm.obj" \
+"../lib/Board/src/sysbios/m3_TaskSupport_asm.obj" \
+"../lib/Board/src/sysbios/rom_sysbios.obj" \
+"../CC2650STK.cmd" \
+>>>>>>> Stashed changes
 $(GEN_CMDS__FLAG) \
 -l"C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/cc26xxware_2_24_03_17272/driverlib/bin/ccs/driverlib.lib" \
 -llibc.a \
@@ -26,12 +38,19 @@ RMDIR := RMDIR /S/Q
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+<<<<<<< Updated upstream
 -include lib/Board/subdir_vars.mk
 -include lib/HR_functions/subdir_vars.mk
 -include lib/MAX30100/subdir_vars.mk
 -include lib/Board/subdir_rules.mk
 -include lib/HR_functions/subdir_rules.mk
 -include lib/MAX30100/subdir_rules.mk
+=======
+-include subdir_vars.mk
+-include lib/Board/src/sysbios/subdir_vars.mk
+-include subdir_rules.mk
+-include lib/Board/src/sysbios/subdir_rules.mk
+>>>>>>> Stashed changes
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
