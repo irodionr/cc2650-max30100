@@ -12,7 +12,7 @@ void readFrom(uint8_t regAddr, uint8_t *txBuffer, uint8_t *rxBuffer, I2C_Transac
 
     if (I2C_transfer(*i2c, &(*i2cTransaction)))
     {
-//        System_printf("Reading from 0x%x: 0x%x\n", regAddr, rxBuffer[0]);
+        System_printf("0x%x: 0x%x\n", regAddr, rxBuffer[0]);
     }
     else
     {

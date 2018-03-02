@@ -14,12 +14,7 @@ uint8_t returnFrom(uint8_t regAddr, uint8_t *txBuffer, uint8_t *rxBuffer, I2C_Tr
     {
         return rxBuffer[0];
     }
-    else
-    {
-        System_printf("I2C Bus Fault \n");
-    }
-	
-	System_flush();
+
 	return 0x0;
 }
 
@@ -43,6 +38,8 @@ void taskFxn(UArg arg0, UArg arg1)
     if (i2c == NULL){ System_printf("I2C initialization error\n"); }
     else { System_printf("\nI2C initialized\n\n"); }
 
+    writeTo(MAX30100_MODE_CONFIG, 0x40, txBuffer, rxBuffer, &i2cTransaction, &i2c); //reset
+
 	/* === Measuring heart rate === */
     writeTo(MAX30100_LED_CONFIG, 0xFF, txBuffer, rxBuffer, &i2cTransaction, &i2c); //LED current = 50 mA
     writeTo(MAX30100_SPO2_CONFIG, 0x7, txBuffer, rxBuffer, &i2cTransaction, &i2c); //sample rate = 100 sps, LED pulse width = 1600 us, ADC resolution = 16 bits
@@ -51,24 +48,38 @@ void taskFxn(UArg arg0, UArg arg1)
 	
 	writeTo(MAX30100_FIFO_WR_PTR, 0x0, txBuffer, rxBuffer, &i2cTransaction, &i2c); //clear write pointer
 	writeTo(MAX30100_FIFO_RD_PTR, 0x0, txBuffer, rxBuffer, &i2cTransaction, &i2c); //clear read pointer
-	
-	for (i = 0; i < 1; i++) { //number of samples to read
-		while (!tmp) { //waiting for HR_RDY flag in INTERRUPT_STATUS
+
+	readFrom(MAX30100_OVRFLOW_CTR, txBuffer, rxBuffer, &i2cTransaction, &i2c);
+
+	for (i = 0; i < 128; i++) { //number of samples to read
+	    tmp = returnFrom(MAX30100_INT_STATUS, txBuffer, rxBuffer, &i2cTransaction, &i2c);
+	    tmp &= 0x20; //0b0010000 - HR_RDY flag
+
+	    while (tmp != 0x20) { //waiting for HR_RDY flag in INTERRUPT_STATUS
 			tmp = returnFrom(MAX30100_INT_STATUS, txBuffer, rxBuffer, &i2cTransaction, &i2c);
-			tmp &= 0x20; //0x0010000 - HR_RDY flag
+			tmp &= 0x20; //0b0010000 - HR_RDY flag
 			
-			//System_printf("Waiting for HR_RDY... \n");
-			//System_flush();
+			System_printf("Waiting for HR_RDY... \n");
+			System_flush();
 		}
 		
+		readFrom(MAX30100_OVRFLOW_CTR, txBuffer, rxBuffer, &i2cTransaction, &i2c);
+		readFrom(MAX30100_INT_STATUS, txBuffer, rxBuffer, &i2cTransaction, &i2c);
+
 		dataIR = returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c); //1st byte - IR data for HR
 		dataIR = (dataIR << 8) + returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c); //2nd byte - IR data for HR
 		dataR = returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c); //3rd byte
 		dataR = (dataR << 8) + returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c); //4th byte
 		
-		System_printf("IR data: 0x%x\n", dataIR);
+		readFrom(MAX30100_INT_STATUS, txBuffer, rxBuffer, &i2cTransaction, &i2c);
+
+		System_printf("%d\n", dataIR, dataIR);
 		//System_printf("R data: 0x%x\n", dataR);
 		System_flush();
+
+		readFrom(MAX30100_FIFO_WR_PTR, txBuffer, rxBuffer, &i2cTransaction, &i2c);
+		readFrom(MAX30100_OVRFLOW_CTR, txBuffer, rxBuffer, &i2cTransaction, &i2c);
+		readFrom(MAX30100_FIFO_RD_PTR, txBuffer, rxBuffer, &i2cTransaction, &i2c);
 	}
 	
     /* === I2C closing === */
