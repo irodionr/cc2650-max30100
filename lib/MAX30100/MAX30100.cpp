@@ -1,23 +1,6 @@
 #include "MAX30100.h"
 #include "lib/MAXLIB/R_W.h"
 
-uint8_t returnFrom(uint8_t regAddr, uint8_t *txBuffer, uint8_t *rxBuffer, I2C_Transaction *i2cTransaction, I2C_Handle *i2c)
-{
-
-    txBuffer[0] = regAddr;
-    i2cTransaction->writeBuf = txBuffer;
-    i2cTransaction->writeCount = 1;
-    i2cTransaction->readBuf = rxBuffer;
-    i2cTransaction->readCount = 1;
-
-    if (I2C_transfer(*i2c, &(*i2cTransaction)))
-    {
-        return rxBuffer[0];
-    }
-
-	return 0x0;
-}
-
 void taskFxn(UArg arg0, UArg arg1)
 {
     I2C_Handle      i2c;
