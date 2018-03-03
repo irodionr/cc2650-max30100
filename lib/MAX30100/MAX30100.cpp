@@ -1,5 +1,7 @@
 #include "MAX30100.h"
 #include "lib/MAXLIB/R_W.h"
+#include <ti/sysbios/fatfs/ff.h>
+#include <ti/sysbios/fatfs/diskio.h>
 
 void taskFxn(UArg arg0, UArg arg1)
 {
@@ -14,12 +16,17 @@ void taskFxn(UArg arg0, UArg arg1)
     i2cTransaction.slaveAddress = MAX30100_ADDRESS;
     i2cParams.bitRate = I2C_400kHz;
 	int i;
+	static FIL fsrc, fdst;
 	
     /* === I2C initialization === */
     I2C_Params_init(&i2cParams);
     i2c = I2C_open(CC2650STK_I2C0, &i2cParams);
     if (i2c == NULL){ System_printf("I2C initialization error\n"); }
     else { System_printf("\nI2C initialized\n\n"); }
+	
+	/* === Opening file for writing === */
+	f_open(&fdst, "HR_data.txt", FA_CREATE_NEW | FA_READ);
+	f_open(&fsrc, "HR_data.txt", FA_OPEN_EXISTING | FA_WRITE);
 
     writeTo(MAX30100_MODE_CONFIG, 0x40, txBuffer, rxBuffer, &i2cTransaction, &i2c); //reset
 
@@ -29,9 +36,6 @@ void taskFxn(UArg arg0, UArg arg1)
 	writeTo(MAX30100_MODE_CONFIG, 0x2, txBuffer, rxBuffer, &i2cTransaction, &i2c); //mode = HR only
 	writeTo(MAX30100_INT_ENABLE, 0xA0, txBuffer, rxBuffer, &i2cTransaction, &i2c); //enable ALMOST_FULL and HR_READY interrupts
 	
-	writeTo(MAX30100_FIFO_WR_PTR, 0x0, txBuffer, rxBuffer, &i2cTransaction, &i2c); //clear write pointer
-	writeTo(MAX30100_FIFO_RD_PTR, 0x0, txBuffer, rxBuffer, &i2cTransaction, &i2c); //clear read pointer
-
 	readFrom(MAX30100_OVRFLOW_CTR, txBuffer, rxBuffer, &i2cTransaction, &i2c);
 
 	for (i = 0; i < 128; i++) { //number of samples to read
@@ -41,29 +45,28 @@ void taskFxn(UArg arg0, UArg arg1)
 	    while (tmp != 0x20) { //waiting for HR_RDY flag in INTERRUPT_STATUS
 			tmp = returnFrom(MAX30100_INT_STATUS, txBuffer, rxBuffer, &i2cTransaction, &i2c);
 			tmp &= 0x20; //0b0010000 - HR_RDY flag
-			
-			System_printf("Waiting for HR_RDY... \n");
-			System_flush();
 		}
 		
 		readFrom(MAX30100_OVRFLOW_CTR, txBuffer, rxBuffer, &i2cTransaction, &i2c);
-		readFrom(MAX30100_INT_STATUS, txBuffer, rxBuffer, &i2cTransaction, &i2c);
 
 		dataIR = returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c); //1st byte - IR data for HR
-		dataIR = (dataIR << 8) + returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c); //2nd byte - IR data for HR
+		dataIR = (dataIR << 8) | returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c); //2nd byte - IR data for HR
 		dataR = returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c); //3rd byte
-		dataR = (dataR << 8) + returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c); //4th byte
+		dataR = (dataR << 8) | returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c); //4th byte
 		
-		readFrom(MAX30100_INT_STATUS, txBuffer, rxBuffer, &i2cTransaction, &i2c);
-
-		System_printf("%d\n", dataIR, dataIR);
-		//System_printf("R data: 0x%x\n", dataR);
-		System_flush();
+		//System_printf("%d\n", dataIR);
+		//System_flush();
+		
+		f_printf(&fsrc, "%d\n", dataIR);
 
 		readFrom(MAX30100_FIFO_WR_PTR, txBuffer, rxBuffer, &i2cTransaction, &i2c);
 		readFrom(MAX30100_OVRFLOW_CTR, txBuffer, rxBuffer, &i2cTransaction, &i2c);
 		readFrom(MAX30100_FIFO_RD_PTR, txBuffer, rxBuffer, &i2cTransaction, &i2c);
 	}
+	
+	/* === Closing file === */
+	f_close(&fdst);
+	f_close(&fsrc);
 	
     /* === I2C closing === */
     I2C_close(i2c);
