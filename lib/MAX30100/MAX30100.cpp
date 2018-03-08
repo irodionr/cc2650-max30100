@@ -1,3 +1,4 @@
+
 #include "MAX30100.h"
 #include "lib/MAXLIB/R_W.h"
 
@@ -13,6 +14,7 @@ void taskFxn(UArg arg0, UArg arg1)
 	i2cTransaction.slaveAddress = MAX30100_ADDRESS;
 	i2cParams.bitRate = I2C_400kHz;
 	int i;
+	int j;
 	int num_available_samples;
 
 	/* === I2C initialization === */
@@ -29,14 +31,14 @@ void taskFxn(UArg arg0, UArg arg1)
 	writeTo(MAX30100_MODE_CONFIG, 0x2, txBuffer, rxBuffer, &i2cTransaction, &i2c); //mode = HR only
 	writeTo(MAX30100_INT_ENABLE, 0xA0, txBuffer, rxBuffer, &i2cTransaction, &i2c); //enable ALMOST_FULL and HR_READY interrupts
 
-	while (true) { //infinite loop
+	for (i = 0; i < 256; i++) {
 		//readFrom(MAX30100_FIFO_WR_PTR, txBuffer, rxBuffer, &i2cTransaction, &i2c); //for debugging
 		//readFrom(MAX30100_OVRFLOW_CTR, txBuffer, rxBuffer, &i2cTransaction, &i2c);
 		//readFrom(MAX30100_FIFO_RD_PTR, txBuffer, rxBuffer, &i2cTransaction, &i2c);
 
 		num_available_samples = returnFrom(MAX30100_FIFO_WR_PTR, txBuffer, rxBuffer, &i2cTransaction, &i2c) - returnFrom(MAX30100_FIFO_RD_PTR, txBuffer, rxBuffer, &i2cTransaction, &i2c);
 
-		for (i = 0; i < num_available_samples; i++) { //number of samples to read
+		for (j = 0; j < num_available_samples; j++) { //number of samples to read
 			dataIR = returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c); //1st byte - IR data for HR
 			dataIR = (dataIR << 8) | returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c); //2nd byte - IR data for HR
 			dataR = returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c); //3rd byte
