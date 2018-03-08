@@ -25,13 +25,13 @@ void taskFxn(UArg arg0, UArg arg1)
 
 	writeTo(MAX30100_MODE_CONFIG, 0x40, txBuffer, rxBuffer, &i2cTransaction, &i2c); //reset
 
-																					/* === Measuring heart rate === */
+	/* === Measuring heart rate === */
 	writeTo(MAX30100_LED_CONFIG, 0xFF, txBuffer, rxBuffer, &i2cTransaction, &i2c); //LED current = 50 mA
 	writeTo(MAX30100_SPO2_CONFIG, 0x7, txBuffer, rxBuffer, &i2cTransaction, &i2c); //sample rate = 100 sps, LED pulse width = 1600 us, ADC resolution = 16 bits
 	writeTo(MAX30100_MODE_CONFIG, 0x2, txBuffer, rxBuffer, &i2cTransaction, &i2c); //mode = HR only
 	writeTo(MAX30100_INT_ENABLE, 0xA0, txBuffer, rxBuffer, &i2cTransaction, &i2c); //enable ALMOST_FULL and HR_READY interrupts
 
-	for (i = 0; i < 256; i++) {
+	for (i = 0; i < 1024; i++) {
 		//readFrom(MAX30100_FIFO_WR_PTR, txBuffer, rxBuffer, &i2cTransaction, &i2c); //for debugging
 		//readFrom(MAX30100_OVRFLOW_CTR, txBuffer, rxBuffer, &i2cTransaction, &i2c);
 		//readFrom(MAX30100_FIFO_RD_PTR, txBuffer, rxBuffer, &i2cTransaction, &i2c);
