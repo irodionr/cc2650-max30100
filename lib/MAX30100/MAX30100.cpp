@@ -2,7 +2,7 @@
 #include "MAX30100.h"
 #include "lib/MAXLIB/R_W.h"
 
-#define SIZE 168
+#define SIZE 1000
 
 void taskFxn(UArg arg0, UArg arg1)
 {
@@ -11,56 +11,46 @@ void taskFxn(UArg arg0, UArg arg1)
 	I2C_Transaction i2cTransaction;
 	uint8_t         txBuffer[2];
 	uint8_t         rxBuffer[1];
+	uint8_t         buffer[4];
 	uint8_t         temp;
-	uint16_t		dataIR[SIZE];
-	uint16_t		dataR[SIZE];
+	uint16_t        dataIR[SIZE];
+	int i;
 	i2cTransaction.slaveAddress = MAX30100_ADDRESS;
 	i2cParams.bitRate = I2C_400kHz;
-	int i;
-	//int j;
 
 	/* === I2C initialization === */
 	I2C_Params_init(&i2cParams);
 	i2c = I2C_open(CC2650STK_I2C0, &i2cParams);
-	if (i2c == NULL) { System_printf("I2C initialization error\n"); }
-	else { System_printf("\nI2C initialized\n\n"); }
 
 	writeTo(MAX30100_MODE_CONFIG, 0x40, txBuffer, rxBuffer, &i2cTransaction, &i2c); //reset
 
 	/* === Measuring heart rate === */
-	writeTo(MAX30100_LED_CONFIG, 0x0F, txBuffer, rxBuffer, &i2cTransaction, &i2c); //LED current = 50 mA
-	writeTo(MAX30100_SPO2_CONFIG, 0x7, txBuffer, rxBuffer, &i2cTransaction, &i2c); //sample rate = 100 sps, LED pulse width = 1600 us, ADC resolution = 16 bits
+	writeTo(MAX30100_LED_CONFIG, 0xF, txBuffer, rxBuffer, &i2cTransaction, &i2c); //LED current = 50.0 mA
+	writeTo(MAX30100_SPO2_CONFIG, 0x7, txBuffer, rxBuffer, &i2cTransaction, &i2c); //sample rate = 100 Hz, LED pulse width = 1600 us, ADC resolution = 16 bits
 	writeTo(MAX30100_MODE_CONFIG, 0x2, txBuffer, rxBuffer, &i2cTransaction, &i2c); //mode = HR only
-	writeTo(MAX30100_INT_ENABLE, 0xA0, txBuffer, rxBuffer, &i2cTransaction, &i2c); //enable ALMOST_FULL and HR_READY interrupts
+	writeTo(MAX30100_INT_ENABLE, 0x20, txBuffer, rxBuffer, &i2cTransaction, &i2c); //enable HR_READY interrupt
+
+	System_printf("Ready\n");
 
 	for (i = 0; i < SIZE; i++) {
-		//readFrom(MAX30100_FIFO_WR_PTR, txBuffer, rxBuffer, &i2cTransaction, &i2c); //for debugging
-		//readFrom(MAX30100_FIFO_RD_PTR, txBuffer, rxBuffer, &i2cTransaction, &i2c);
-		//readFrom(MAX30100_OVRFLOW_CTR, txBuffer, rxBuffer, &i2cTransaction, &i2c);
+        temp = 0x0;
 
-		//num_available_samples = returnFrom(MAX30100_FIFO_WR_PTR, txBuffer, rxBuffer, &i2cTransaction, &i2c) - returnFrom(MAX30100_FIFO_RD_PTR, txBuffer, rxBuffer, &i2cTransaction, &i2c);
+        while (temp == 0x0) {
+            temp = returnFrom(MAX30100_INT_STATUS, txBuffer, rxBuffer, &i2cTransaction, &i2c);
+            temp &= 0x20;
+        }
 
-		//for (j = 0; j < num_available_samples; j++) { //number of samples to read
+        buffer[0] = returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c);
+        buffer[1] = returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c);
+        buffer[2] = returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c);
+        buffer[3] = returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c);
 
-	    temp = 0x0;
-
-	    while (temp == 0x0) {
-	        temp = returnFrom(MAX30100_INT_STATUS, txBuffer, rxBuffer, &i2cTransaction, &i2c);
-	        temp &= 0x20;
-	    }
-
-        dataIR[i] = returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c); //1st byte - IR data for HR
-        dataIR[i] = (dataIR[i] << 8) | returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c); //2nd byte - IR data for HR
-        dataR[i] = returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c); //3rd byte
-        dataR[i] = (dataR[i] << 8) | returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c); //4th byte
-
-        //System_printf("%d) %d\n", i, dataIR);
-		//}
+        dataIR[i] = (buffer[0] << 8) | buffer[1];
 	}
 
 	/* === I2C closing === */
 	I2C_close(i2c);
-	System_printf("\nI2C Closed\n");
+	System_printf("\nI2C Closed - %d\n", dataIR[0]);
 	System_flush();
 }
 
@@ -78,7 +68,7 @@ int main(void)
 
 	/* Construct tmp007 Task thread */
 	Task_Params_init(&taskParams);
-	taskParams.stackSize = TASKSTACKSIZE;
+	taskParams.stackSize = TASKSTACKSIZE; // can be changed in Service.h
 	taskParams.stack = &task0Stack;
 	Task_construct(&task0Struct, (Task_FuncPtr)taskFxn, &taskParams, NULL);
 
