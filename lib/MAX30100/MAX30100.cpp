@@ -46,6 +46,10 @@ void taskFxn(UArg arg0, UArg arg1)
         buffer[3] = returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c);
 
         dataIR[i] = (buffer[0] << 8) | buffer[1];
+		
+		if (dataIR[i] == 0x00 && i > 0) {
+			dataIR[i] = dataIR[i-1];
+		}
 	}
 
 	/* === I2C closing === */
