@@ -65,12 +65,12 @@ func heartrate(IR []float64) float64 {
 	beats := 0
 
 	for i := 0; i < len(IR); i++ {
-		if !peak && IR[i] > 200.0 {
+		if !peak && IR[i] > 450.0 {
 			peak = true
 			beats++
 		}
 
-		if peak && IR[i] <= 200.0 {
+		if peak && IR[i] <= 450.0 {
 			peak = false
 		}
 	}
