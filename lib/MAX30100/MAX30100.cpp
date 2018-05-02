@@ -48,6 +48,10 @@ void taskFxn(UArg arg0, UArg arg1)
 
         dataIR[i] = (buffer[0] << 8) | buffer[1];
         //dataR[i] = (buffer[2] << 8) | buffer[3];
+		
+		if (dataIR[i] == 0x00 && i != 0) {
+			dataIR[i] = dataIR[i-1];
+		}
 	}
 
 	/* === I2C closing === */
