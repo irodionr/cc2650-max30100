@@ -18,7 +18,7 @@
 #include "lib/Board/Board.h"
 #include <stdio.h>
 
-#define TASKSTACKSIZE 8192
+#define TASKSTACKSIZE 15000
 
 /* Global memory storage for a PIN_Config table */
 static PIN_State ledPinState;

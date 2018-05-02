@@ -14,6 +14,7 @@ void taskFxn(UArg arg0, UArg arg1)
 	uint8_t         buffer[4];
 	uint8_t         temp;
 	uint16_t        dataIR[SIZE];
+	//uint16_t        dataR[SIZE];
 	int i;
 	i2cTransaction.slaveAddress = MAX30100_ADDRESS;
 	i2cParams.bitRate = I2C_400kHz;
@@ -25,7 +26,7 @@ void taskFxn(UArg arg0, UArg arg1)
 	writeTo(MAX30100_MODE_CONFIG, 0x40, txBuffer, rxBuffer, &i2cTransaction, &i2c); //reset
 
 	/* === Measuring heart rate === */
-	writeTo(MAX30100_LED_CONFIG, 0xF, txBuffer, rxBuffer, &i2cTransaction, &i2c); //LED current = 50.0 mA
+	writeTo(MAX30100_LED_CONFIG, 0x7, txBuffer, rxBuffer, &i2cTransaction, &i2c); //LED current = 24.0 mA
 	writeTo(MAX30100_SPO2_CONFIG, 0x7, txBuffer, rxBuffer, &i2cTransaction, &i2c); //sample rate = 100 Hz, LED pulse width = 1600 us, ADC resolution = 16 bits
 	writeTo(MAX30100_MODE_CONFIG, 0x2, txBuffer, rxBuffer, &i2cTransaction, &i2c); //mode = HR only
 	writeTo(MAX30100_INT_ENABLE, 0x20, txBuffer, rxBuffer, &i2cTransaction, &i2c); //enable HR_READY interrupt
@@ -46,6 +47,7 @@ void taskFxn(UArg arg0, UArg arg1)
         buffer[3] = returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c);
 
         dataIR[i] = (buffer[0] << 8) | buffer[1];
+        //dataR[i] = (buffer[2] << 8) | buffer[3];
 	}
 
 	/* === I2C closing === */
