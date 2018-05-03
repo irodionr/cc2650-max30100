@@ -3,17 +3,14 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"math"
 	"os"
 	"strconv"
 )
 
-func threshold(data []float64, low float64, high float64) {
-	if data[0] < low || data[0] > high {
-		data[0] = (low + high) / 2
-	}
-
+func threshold(data []float64, maxDiff float64) {
 	for i := 1; i < len(data); i++ {
-		if data[i] < low || data[i] > high {
+		if math.Abs(data[i]-data[i-1]) > maxDiff {
 			data[i] = data[i-1]
 		}
 	}
@@ -101,12 +98,11 @@ func main() {
 
 		switch os.Args[1] {
 		case "-t":
-			if len(os.Args) != 5 {
-				fmt.Fprintln(os.Stderr, "Usage: -t filename low high")
+			if len(os.Args) != 4 {
+				fmt.Fprintln(os.Stderr, "Usage: -t filename maxDiff")
 			} else {
-				arg1, _ := strconv.ParseFloat(os.Args[3], 64)
-				arg2, _ := strconv.ParseFloat(os.Args[4], 64)
-				threshold(data, arg1, arg2)
+				arg, _ := strconv.ParseFloat(os.Args[3], 64)
+				threshold(data, arg)
 			}
 		case "-dc":
 			if len(os.Args) != 4 {

@@ -60,7 +60,7 @@ void taskFxn(UArg arg0, UArg arg1)
 
 	/* === I2C closing === */
 	I2C_close(i2c);
-	System_printf("\nI2C Closed - %d\n");
+	System_printf("\nI2C Closed\n");
 	System_flush();
 }
 
