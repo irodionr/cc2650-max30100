@@ -1,8 +1,6 @@
-
 #include "MAX30100.h"
 #include "lib/MAXLIB/R_W.h"
-
-#define SIZE 1000
+#include "lib/MAXLIB/filter.h"
 
 void taskFxn(UArg arg0, UArg arg1)
 {
@@ -26,37 +24,48 @@ void taskFxn(UArg arg0, UArg arg1)
 	writeTo(MAX30100_MODE_CONFIG, 0x40, txBuffer, rxBuffer, &i2cTransaction, &i2c); //reset
 
 	/* === Measuring heart rate === */
-	// TODO: increase RED LED current until IR and RED DC levels match
+	// increase RED LED current until IR and RED DC levels match
 	writeTo(MAX30100_LED_CONFIG, 0x87, txBuffer, rxBuffer, &i2cTransaction, &i2c); //LED current = 24.0 mA
 	writeTo(MAX30100_SPO2_CONFIG, 0x7, txBuffer, rxBuffer, &i2cTransaction, &i2c); //sample rate = 100 Hz, LED pulse width = 1600 us, ADC resolution = 16 bits
 	writeTo(MAX30100_MODE_CONFIG, 0x3, txBuffer, rxBuffer, &i2cTransaction, &i2c); //mode = SPO2
 	writeTo(MAX30100_INT_ENABLE, 0x10, txBuffer, rxBuffer, &i2cTransaction, &i2c); //enable SPO2_RDY interrupt
 
+	for (i = 0; i < 20; i++) { // first 10 to 15 readings are incorrect
+		returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c);
+	}
+	
 	System_printf("Ready\n");
-
+	
 	for (i = 0; i < SIZE; i++) {
-        temp = 0x0;
-
+        // wait for data
+		temp = 0x0;
         while (temp == 0x0) {
             temp = returnFrom(MAX30100_INT_STATUS, txBuffer, rxBuffer, &i2cTransaction, &i2c);
             temp &= 0x10;
         }
 
+		// read 4 bytes
         buffer[0] = returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c);
         buffer[1] = returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c);
         buffer[2] = returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c);
         buffer[3] = returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c);
 
+		// form bytes into data
         dataIR[i] = (buffer[0] << 8) | buffer[1];
         dataR[i] = (buffer[2] << 8) | buffer[3];
-		
-		if (dataIR[i] == 0x00 && i != 0) {
-			dataIR[i] = dataIR[i-1];
-		}
-		if (dataR[i] == 0x00 && i != 0) {
-            dataR[i] = dataR[i-1];
-        }
 	}
+	
+	threshold(dataIR, 500.0);
+	threshold(dataR, 500.0);
+	
+	dc(dataIR, 0.95);
+	dc(dataR, 0.95);
+	
+	meanMedian(dataIR, 15);
+	meanMedian(dataR, 15);
+	
+	butterworth(dataIR);
+	butterworth(dataR);
 
 	/* === I2C closing === */
 	I2C_close(i2c);
