@@ -11,8 +11,8 @@ void taskFxn(UArg arg0, UArg arg1)
 	uint8_t         rxBuffer[1];
 	uint8_t         buffer[4];
 	uint8_t         temp;
-	uint16_t        dataIR[SIZE];
-	uint16_t        dataR[SIZE];
+	float           dataIR[SIZE];
+	float           dataR[SIZE];
 	int i;
 	i2cTransaction.slaveAddress = MAX30100_ADDRESS;
 	i2cParams.bitRate = I2C_400kHz;
@@ -21,7 +21,7 @@ void taskFxn(UArg arg0, UArg arg1)
 	I2C_Params_init(&i2cParams);
 	i2c = I2C_open(CC2650STK_I2C0, &i2cParams);
 
-	writeTo(MAX30100_MODE_CONFIG, 0x40, txBuffer, rxBuffer, &i2cTransaction, &i2c); //reset
+	//writeTo(MAX30100_MODE_CONFIG, 0x40, txBuffer, rxBuffer, &i2cTransaction, &i2c); //reset
 
 	/* === Measuring heart rate === */
 	// increase RED LED current until IR and RED DC levels match
@@ -30,11 +30,22 @@ void taskFxn(UArg arg0, UArg arg1)
 	writeTo(MAX30100_MODE_CONFIG, 0x3, txBuffer, rxBuffer, &i2cTransaction, &i2c); //mode = SPO2
 	writeTo(MAX30100_INT_ENABLE, 0x10, txBuffer, rxBuffer, &i2cTransaction, &i2c); //enable SPO2_RDY interrupt
 
-	for (i = 0; i < 20; i++) { // first 10 to 15 readings are incorrect
-		returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c);
-	}
-	
 	System_printf("Ready\n");
+
+	for (i = 0; i < 20; i++) { // first 10 to 15 readings are incorrect
+	    // wait for data
+        temp = 0x0;
+        while (temp == 0x0) {
+            temp = returnFrom(MAX30100_INT_STATUS, txBuffer, rxBuffer, &i2cTransaction, &i2c);
+            temp &= 0x10;
+        }
+
+        // read 4 bytes
+        buffer[0] = returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c);
+        buffer[1] = returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c);
+        buffer[2] = returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c);
+        buffer[3] = returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c);
+	}
 	
 	for (i = 0; i < SIZE; i++) {
         // wait for data
@@ -51,12 +62,12 @@ void taskFxn(UArg arg0, UArg arg1)
         buffer[3] = returnFrom(MAX30100_FIFO_DATA, txBuffer, rxBuffer, &i2cTransaction, &i2c);
 
 		// form bytes into data
-        dataIR[i] = (buffer[0] << 8) | buffer[1];
-        dataR[i] = (buffer[2] << 8) | buffer[3];
+        dataIR[i] = (float)((buffer[0] << 8) | buffer[1]);
+        dataR[i] = (float)((buffer[2] << 8) | buffer[3]);
 	}
 	
-	threshold(dataIR, 500.0);
-	threshold(dataR, 500.0);
+	threshold(dataIR, 1000.0);
+	threshold(dataR, 1000.0);
 	
 	dc(dataIR, 0.95);
 	dc(dataR, 0.95);

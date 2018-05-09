@@ -3,17 +3,17 @@
 
 #define SIZE 1000
 
-void threshold(float *data, float maxDiff) {
+void threshold(float data[SIZE], float maxDiff) {
 	int i;
 	
 	for (i = 1; i < SIZE; i++) {
-		if (data[i] < data[i-1] - maxDiff || data[i] > data[i] + 500) {
+		if (data[i] - data[i-1] > maxDiff || data[i] - data[i-1] < -maxDiff) {
 			data[i] = data[i-1];
 		}
 	}
 }
 
-void dc(float *data, float alpha) {
+void dc(float data[SIZE], float alpha) {
 	int i;
 	float w[SIZE];
 
@@ -23,12 +23,16 @@ void dc(float *data, float alpha) {
 	}
 }
 
-void meanMedian(float *data, int window) {
-	float values[window];
-	float sum;
-	int index;
-	int count;
+void meanMedian(float data[SIZE], const int window) {
+	float values[20];
+	float sum = 0;
+	int index = 0;
+	int count = 0;
 	int i;
+
+	for (i = 0; i < window; i++) {
+	    values[i] = 0;
+	}
 
 	for (i = 0; i < SIZE; i++) {
 		float avg;
@@ -38,7 +42,7 @@ void meanMedian(float *data, int window) {
 		sum += values[index];
 
 		index++;
-		index %= window;
+		index = index % window;
 
 		if (count < window) {
 			count++;
@@ -50,7 +54,7 @@ void meanMedian(float *data, int window) {
 	}
 }
 
-void butterworth(float *data) {
+void butterworth(float data[SIZE]) {
 	float v[2];
 	int i;
 	
@@ -62,7 +66,7 @@ void butterworth(float *data) {
 	}
 }
 
-float heartrate(float *data) float64 {
+float heartrate(float data[SIZE]) {
 	bool peak;
 	int beats;
 	int i;
