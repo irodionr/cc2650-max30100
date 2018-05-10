@@ -60,6 +60,7 @@ void butterworth(float data[SIZE]) {
 	
 	for (i = 0; i < SIZE; i++) {
 		v[0] = v[1];
+		// constants for 50 - 220 BPM, http://www.schwietering.com/jayduino/filtuino/
 		v[1] = (2.452372752527856026e-1 * data[i]) + (0.50952544949442879485 * v[0]);
 
 		data[i] = v[0] + v[1];
@@ -91,7 +92,8 @@ float heartrate(float data[SIZE]) {
 	beats = 0;
 	threshold = max(data) / 3.0; // multiplier (1/3) can be tweaked
 
-	for (i = 0; i < SIZE; i++) {
+	// offset to the right by 100 after dc filter
+	for (i = 100; i < SIZE; i++) {
 		if (!peak && data[i] > threshold) {
 			peak = true;
 			beats++;
@@ -102,7 +104,8 @@ float heartrate(float data[SIZE]) {
 		}
 	}
 
-	return (float)beats * 6000.0 / (float)SIZE;
+	// offset to the right by 100 after dc filter => 9 seconds instead of 10
+	return (float)beats * 6000.0 / (float)(SIZE - 100);
 }
 
 float spo2(float dataIR[SIZE], float dataR[SIZE]) {
@@ -115,7 +118,8 @@ float spo2(float dataIR[SIZE], float dataR[SIZE]) {
 	rSquareSum = 0.0;
 	rms = 0.0;
 	
-	for (i = 0; i < SIZE; i++) {
+	// offset to the right by 100 after dc filter
+	for (i = 100; i < SIZE; i++) {
 		irSquareSum += dataIR[i] * dataIR[i];
 		rSquareSum += dataR[i] * dataR[i];
 	}
