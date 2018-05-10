@@ -71,13 +71,10 @@ void taskFxn(UArg arg0, UArg arg1)
 	
 	dc(dataIR, 0.95);
 	dc(dataR, 0.95);
+	System_printf("SpO2: %f\n", SpO2(dataIR, dataR));	
 	
 	meanMedian(dataIR, 15);
-	meanMedian(dataR, 15);
-	
 	butterworth(dataIR);
-	butterworth(dataR);
-	
 	System_printf("Heartrate: %f\n", heartrate(dataIR));
 
 	/* === I2C closing === */

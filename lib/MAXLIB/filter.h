@@ -89,7 +89,7 @@ float heartrate(float data[SIZE]) {
 	
 	peak = false;
 	beats = 0;
-	threshold = max(data) / 3.0;
+	threshold = max(data) / 3.0; // multiplier (1/3) can be tweaked
 
 	for (i = 0; i < SIZE; i++) {
 		if (!peak && data[i] > threshold) {
@@ -103,6 +103,31 @@ float heartrate(float data[SIZE]) {
 	}
 
 	return (float)beats * 6000.0 / (float)SIZE;
+}
+
+float spo2(float dataIR[SIZE], float dataR[SIZE]) {
+	float irSquareSum;
+	float rSquareSum;
+	float rmsRatio;
+	int i;
+	
+	irSquareSum = 0.0;
+	rSquareSum = 0.0;
+	rms = 0.0;
+	
+	for (i = 0; i < SIZE; i++) {
+		irSquareSum += dataIR[i] * dataIR[i];
+		rSquareSum += dataR[i] * dataR[i];
+	}
+	
+	//requires math.h
+	//rmsRatio = log(sqrt(rSquareSum / samplesRecorded)) / log(sqrt(irSquareSum / samplesRecorded));
+	
+	//include wavelengths into formula
+	//rmsRatio = (log(sqrt(rSquareSum / samplesRecorded)) * 650.0) / (log(sqrt(irSquareSum / samplesRecorded)) * 950.0);
+	
+	//constants require calibration
+	return 110.0 - 18.0 * rmsRatio;
 }
 
 #endif
