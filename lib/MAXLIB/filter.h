@@ -66,18 +66,38 @@ void butterworth(float data[SIZE]) {
 	}
 }
 
+float max(float data[SIZE]) {
+	int i;
+	float m;
+	
+	m = data[0];
+	
+	for (i = 0; i < SIZE; i++) {
+		if (data[i] > m) {
+			m = data[i];
+		}
+	}
+	
+	return m;
+}
+
 float heartrate(float data[SIZE]) {
 	bool peak;
 	int beats;
 	int i;
+	float threshold;
+	
+	peak = false;
+	beats = 0;
+	threshold = max(data) / 3.0;
 
 	for (i = 0; i < SIZE; i++) {
-		if (!peak && data[i] > 450.0) {
+		if (!peak && data[i] > threshold) {
 			peak = true;
 			beats++;
 		}
 
-		if (peak && data[i] <= 450.0) {
+		if (peak && data[i] <= threshold) {
 			peak = false;
 		}
 	}

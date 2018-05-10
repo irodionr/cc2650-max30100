@@ -77,6 +77,8 @@ void taskFxn(UArg arg0, UArg arg1)
 	
 	butterworth(dataIR);
 	butterworth(dataR);
+	
+	System_printf("Heartrate: %f\n", heartrate(dataIR));
 
 	/* === I2C closing === */
 	I2C_close(i2c);
