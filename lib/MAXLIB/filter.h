@@ -3,6 +3,8 @@
 
 #define SIZE 1000
 
+#include <math.h>
+
 void threshold(float data[SIZE], float maxDiff) {
 	int i;
 	
@@ -71,9 +73,10 @@ float max(float data[SIZE]) {
 	int i;
 	float m;
 	
-	m = data[0];
+	m = data[100];
 	
-	for (i = 0; i < SIZE; i++) {
+	// offset to the right by 100 after dc filter
+	for (i = 100; i < SIZE; i++) {
 		if (data[i] > m) {
 			m = data[i];
 		}
@@ -116,22 +119,21 @@ float spo2(float dataIR[SIZE], float dataR[SIZE]) {
 	
 	irSquareSum = 0.0;
 	rSquareSum = 0.0;
-	rms = 0.0;
+	rmsRatio = 0.0;
 	
 	// offset to the right by 100 after dc filter
 	for (i = 100; i < SIZE; i++) {
 		irSquareSum += dataIR[i] * dataIR[i];
 		rSquareSum += dataR[i] * dataR[i];
 	}
-	
-	//requires math.h
-	//rmsRatio = log(sqrt(rSquareSum / samplesRecorded)) / log(sqrt(irSquareSum / samplesRecorded));
+
+	rmsRatio = log(sqrt(rSquareSum / (SIZE - 100))) / log(sqrt(irSquareSum / (SIZE - 100)));
 	
 	//include wavelengths into formula
 	//rmsRatio = (log(sqrt(rSquareSum / samplesRecorded)) * 660.0) / (log(sqrt(irSquareSum / samplesRecorded)) * 880.0);
 	
 	//constants require calibration
-	return 110.0 - 18.0 * rmsRatio;
+	return 115.0 - 18.0 * rmsRatio;
 }
 
 #endif
