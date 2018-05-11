@@ -13,6 +13,8 @@ void taskFxn(UArg arg0, UArg arg1)
 	uint8_t         temp;
 	float           dataIR[SIZE];
 	float           dataR[SIZE];
+	float           hr;
+	float           o2;
 	int i;
 	i2cTransaction.slaveAddress = MAX30100_ADDRESS;
 	i2cParams.bitRate = I2C_400kHz;
@@ -21,11 +23,11 @@ void taskFxn(UArg arg0, UArg arg1)
 	I2C_Params_init(&i2cParams);
 	i2c = I2C_open(CC2650STK_I2C0, &i2cParams);
 
-	//writeTo(MAX30100_MODE_CONFIG, 0x40, txBuffer, rxBuffer, &i2cTransaction, &i2c); //reset
+	writeTo(MAX30100_MODE_CONFIG, 0x40, txBuffer, rxBuffer, &i2cTransaction, &i2c); //reset
 
 	/* === Measuring heart rate === */
 	// increase RED LED current until IR and RED DC levels match
-	writeTo(MAX30100_LED_CONFIG, 0x87, txBuffer, rxBuffer, &i2cTransaction, &i2c); //LED current = 24.0 mA
+	writeTo(MAX30100_LED_CONFIG, 0x87, txBuffer, rxBuffer, &i2cTransaction, &i2c); //LED current = 27.1 mA for RED, 24.0 mA for IR
 	writeTo(MAX30100_SPO2_CONFIG, 0x7, txBuffer, rxBuffer, &i2cTransaction, &i2c); //sample rate = 100 Hz, LED pulse width = 1600 us, ADC resolution = 16 bits
 	writeTo(MAX30100_MODE_CONFIG, 0x3, txBuffer, rxBuffer, &i2cTransaction, &i2c); //mode = SPO2
 	writeTo(MAX30100_INT_ENABLE, 0x10, txBuffer, rxBuffer, &i2cTransaction, &i2c); //enable SPO2_RDY interrupt
@@ -71,11 +73,15 @@ void taskFxn(UArg arg0, UArg arg1)
 	
 	dc(dataIR, 0.95);
 	dc(dataR, 0.95);
-	System_printf("SpO2: %f\n", spo2(dataIR, dataR));
 	
+	o2 = spo2(dataIR, dataR);
+	System_printf("SpO2: %f\n", o2);
+
 	meanMedian(dataIR, 15);
 	butterworth(dataIR);
-	System_printf("Heart rate: %f\n", heartrate(dataIR));
+
+	hr = heartrate(dataIR);
+	System_printf("Heart rate: %f\n", hr);
 
 	/* === I2C closing === */
 	I2C_close(i2c);
