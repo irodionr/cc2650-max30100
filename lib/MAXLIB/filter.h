@@ -93,7 +93,7 @@ float heartrate(float data[SIZE]) {
 	
 	peak = false;
 	beats = 0;
-	threshold = max(data) / 3.0; // multiplier (1/3) can be tweaked
+	threshold = max(data) / 3.4; // multiplier should be tweaked depending on LED current
 
 	// offset to the right by 100 after dc filter
 	for (i = 100; i < SIZE; i++) {

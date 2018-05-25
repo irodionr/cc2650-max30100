@@ -61,88 +61,54 @@ func butterworth(data []float64) {
 	}
 }
 
+func max(data []float64) float64 {
+	m := data[100]
+	
+	for i := 100; i < len(data); i++ {
+		if data[i] > m {
+			m = data[i]
+		}
+	}
+	
+	return m
+}
+
 func heartrate(data []float64) float64 {
 	peak := false
 	beats := 0
-
-	for i := 0; i < len(data); i++ {
-		if !peak && data[i] > 450.0 {
+	threshold := max(data) / 3.4
+	fmt.Println("Threshold:", threshold)
+	
+	for i := 100; i < len(data); i++ {
+		if !peak && data[i] > threshold {
 			peak = true
 			beats++
+			fmt.Println(i)
 		}
 
-		if peak && data[i] <= 450.0 {
+		if peak && data[i] <= threshold {
 			peak = false
 		}
 	}
 
-	return float64(beats) * 6000.0 / float64(len(data))
+	fmt.Println("Beats:", beats)
+	
+	return float64(beats) * 6000.0 / float64(len(data) - 100)
 }
 
 func main() {
-	if len(os.Args) < 3 {
-		fmt.Fprintln(os.Stderr, "Usage: -filter filename [arguments]")
-	} else {
-		input, err := os.Open(os.Args[2])
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
-		}
-		defer input.Close()
-
-		var data []float64
-		scanner := bufio.NewScanner(input)
-		for scanner.Scan() {
-			val, _ := strconv.ParseFloat(scanner.Text(), 64)
-			data = append(data, val)
-		}
-
-		switch os.Args[1] {
-		case "-t":
-			if len(os.Args) != 4 {
-				fmt.Fprintln(os.Stderr, "Usage: -t filename maxDiff")
-			} else {
-				arg, _ := strconv.ParseFloat(os.Args[3], 64)
-				threshold(data, arg)
-			}
-		case "-dc":
-			if len(os.Args) != 4 {
-				fmt.Fprintln(os.Stderr, "Usage: -dc filename alpha")
-			} else {
-				arg, _ := strconv.ParseFloat(os.Args[3], 64)
-				dc(data, arg)
-			}
-		case "-mm":
-			if len(os.Args) != 4 {
-				fmt.Fprintln(os.Stderr, "Usage: -mm filename size")
-			} else {
-				arg, _ := strconv.Atoi(os.Args[3])
-				meanMedian(data, arg)
-			}
-		case "-b":
-			if len(os.Args) != 3 {
-				fmt.Fprintln(os.Stderr, "Usage: -b filename")
-			} else {
-				butterworth(data)
-			}
-		default:
-			fmt.Fprintln(os.Stderr, "Filters:")
-			fmt.Fprintln(os.Stderr, "-t - threshold")
-			fmt.Fprintln(os.Stderr, "-dc - DC offset")
-			fmt.Fprintln(os.Stderr, "-mm - mean median")
-			fmt.Fprintln(os.Stderr, "-b - butterworth")
-			fmt.Fprintln(os.Stderr, "-m - median")
-
-			os.Exit(1)
-		}
-
-		output, err := os.Create(os.Args[2] + os.Args[1])
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
-		}
-		defer output.Close()
-
-		for _, val := range data {
-			output.WriteString(fmt.Sprintln(val))
-		}
+	input, err := os.Open(os.Args[1])
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
 	}
+	defer input.Close()
+
+	var data []float64
+	scanner := bufio.NewScanner(input)
+	for scanner.Scan() {
+		val, _ := strconv.ParseFloat(scanner.Text(), 64)
+		data = append(data, val)
+	}
+	
+	fmt.Println("BPM:", heartrate(data))
 }
