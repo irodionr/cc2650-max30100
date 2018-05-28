@@ -7,6 +7,34 @@
 
 void threshold(float data[SIZE], float maxDiff) {
 	int i;
+	int j;
+	int k;
+	float swap;
+	float window[7];
+	
+	for (i = 0; i < 7; i++) {
+		window[i] = data[i];
+	}
+	
+	for (i = 0; i < 6; i++) {
+		j = i;
+		
+		for (k = i + 1; k < 7; k++) {
+			if (window[j] > window[k]) {
+				j = k;
+			}
+		}
+		
+		if (j != i) {
+			swap = window[i];
+			window[i] = window[j];
+			window[j] = swap;
+		}
+	}
+	
+	if (data[0] - window[3] > maxDiff || data[0] - window[3] < -maxDiff) {
+		data[0] = window[3];
+	}
 	
 	for (i = 1; i < SIZE; i++) {
 		if (data[i] - data[i-1] > maxDiff || data[i] - data[i-1] < -maxDiff) {
