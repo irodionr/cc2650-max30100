@@ -80,7 +80,7 @@ void taskFxn(UArg arg0, UArg arg1)
 	meanMedian(dataIR, 15);
 	butterworth(dataIR);
 
-	hr = heartrate(dataIR);
+	hr = heartrate(dataIR); // incorrect result should be reported
 	System_printf("Heart rate: %f\n", hr);
 
 	/* === I2C closing === */

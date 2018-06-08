@@ -1,7 +1,7 @@
 #ifndef FILTER_H_
 #define FILTER_H_
 
-#define SIZE 1000
+#define SIZE 1100
 
 #include <math.h>
 
@@ -88,6 +88,9 @@ void butterworth(float data[SIZE]) {
 	float v[2];
 	int i;
 	
+	v[0] = 0.0;
+	v[1] = 0.0;
+
 	for (i = 0; i < SIZE; i++) {
 		v[0] = v[1];
 		// constants for 50 - 220 BPM, http://www.schwietering.com/jayduino/filtuino/
@@ -97,14 +100,13 @@ void butterworth(float data[SIZE]) {
 	}
 }
 
-float max(float data[SIZE]) {
+float max(float data[SIZE], int begin, int end) {
 	int i;
 	float m;
 	
-	m = data[100];
+	m = data[begin];
 	
-	// offset to the right by 100 after dc filter
-	for (i = 100; i < SIZE; i++) {
+	for (i = begin; i < end; i++) {
 		if (data[i] > m) {
 			m = data[i];
 		}
@@ -121,10 +123,24 @@ float heartrate(float data[SIZE]) {
 	
 	peak = false;
 	beats = 0;
-	threshold = max(data) / 3.4; // multiplier should be tweaked depending on LED current
+
+	threshold = max(data, 100, 300) / 2.0; // multiplier should be tweaked depending on LED current
 
 	// offset to the right by 100 after dc filter
-	for (i = 100; i < SIZE; i++) {
+	for (i = 100; i < 200; i++) {
+        if (!peak && data[i] > threshold) {
+            peak = true;
+            beats++;
+        }
+
+        if (peak && data[i] <= threshold) {
+            peak = false;
+        }
+    }
+
+	for (i = 200; i < SIZE - 100; i++) {
+	    threshold = max(data, i - 100, i + 100) / 2.0;
+
 		if (!peak && data[i] > threshold) {
 			peak = true;
 			beats++;
@@ -135,7 +151,20 @@ float heartrate(float data[SIZE]) {
 		}
 	}
 
-	// offset to the right by 100 after dc filter => 9 seconds instead of 10
+	threshold = max(data, SIZE - 200, SIZE) / 2.0;
+
+    for (i = SIZE - 100; i < SIZE; i++) {
+        if (!peak && data[i] > threshold) {
+            peak = true;
+            beats++;
+        }
+
+        if (peak && data[i] <= threshold) {
+            peak = false;
+        }
+    }
+
+	// offset to the right by 100 after dc filter => 10 seconds instead of 11
 	return (float)beats * 6000.0 / (float)(SIZE - 100);
 }
 
