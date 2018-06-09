@@ -75,14 +75,22 @@ void taskFxn(UArg arg0, UArg arg1)
 	dc(dataR, 0.95);
 	
 	o2 = spo2(dataIR, dataR);
-	System_printf("SpO2: %f\n", o2);
-
+	if (o2 < 80.0) {
+		o2 = 0.0;
+	} else if (o2 > 100.0) {
+		o2 = 1.0;
+	}
+	
 	meanMedian(dataIR, 15);
 	butterworth(dataIR);
-
-	hr = heartrate(dataIR); // incorrect result should be reported
-	System_printf("Heart rate: %f\n", hr);
-
+	
+	hr = heartrate(dataIR);
+	if (hr < 30.0) {
+		hr = 0.0;
+	} else if (hr > 210.0) {
+		hr = 1.0;
+	}
+	
 	/* === I2C closing === */
 	I2C_close(i2c);
 	System_printf("\nI2C Closed\n");

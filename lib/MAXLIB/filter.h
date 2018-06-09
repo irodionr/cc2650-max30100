@@ -93,7 +93,7 @@ void butterworth(float data[SIZE]) {
 
 	for (i = 0; i < SIZE; i++) {
 		v[0] = v[1];
-		// constants for 50 - 220 BPM, http://www.schwietering.com/jayduino/filtuino/
+		// constants for cut-off frequency Fc = 10Hz
 		v[1] = (2.452372752527856026e-1 * data[i]) + (0.50952544949442879485 * v[0]);
 
 		data[i] = v[0] + v[1];
