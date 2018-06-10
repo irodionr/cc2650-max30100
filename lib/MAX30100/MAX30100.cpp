@@ -75,7 +75,7 @@ void taskFxn(UArg arg0, UArg arg1)
 	dc(dataR, 0.95);
 	
 	o2 = spo2(dataIR, dataR);
-	if (o2 < 80.0) {
+	if (o2 < 70.0) {
 		o2 = 0.0;
 	} else if (o2 > 100.0) {
 		o2 = 1.0;
