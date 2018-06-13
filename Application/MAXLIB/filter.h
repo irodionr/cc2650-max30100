@@ -1,7 +1,7 @@
 #ifndef FILTER_H_
 #define FILTER_H_
 
-#define SIZE 1100
+#define SIZE 100
 
 #include <math.h>
 

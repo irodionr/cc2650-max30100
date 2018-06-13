@@ -36,3 +36,4 @@ src/
 lib/Board/src/makefile.libs
 lib/Board/src/sysbios/makefile
 lib/Board/src/sysbios/rom_sysbios.aem3
+.ccsproject

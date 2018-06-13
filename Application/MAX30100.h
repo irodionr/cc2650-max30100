@@ -1,7 +1,7 @@
 #ifndef MAX30100_H_
 #define MAX30100_H_
 
-#include "lib/Board/Service.h"
+#include "Service.h"
 
 // Registers
 #define MAX30100_INT_STATUS     0x00  // Which interrupts are tripped

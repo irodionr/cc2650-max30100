@@ -15,10 +15,10 @@
 #include <ti/drivers/I2C.h>
 
 /* Example/Board Header files */
-#include "lib/Board/Board.h"
+#include "Board.h"
 #include <stdio.h>
 
-#define TASKSTACKSIZE 15500
+#define TASKSTACKSIZE 1000
 
 /* Global memory storage for a PIN_Config table */
 static PIN_State ledPinState;
