@@ -187,7 +187,7 @@ float spo2(float dataIR[SIZE], float dataR[SIZE]) {
 	rmsRatio = log(sqrt(rSquareSum / (SIZE - 100))) / log(sqrt(irSquareSum / (SIZE - 100)));
 	
 	//include wavelengths into formula
-	//rmsRatio = (log(sqrt(rSquareSum / samplesRecorded)) * 660.0) / (log(sqrt(irSquareSum / samplesRecorded)) * 880.0);
+	//rmsRatio = (log(sqrt(rSquareSum / (SIZE - 100))) * 660.0) / (log(sqrt(irSquareSum / (SIZE - 100))) * 880.0);
 	
 	//constants require calibration
 	return 115.0 - 18.0 * rmsRatio;
