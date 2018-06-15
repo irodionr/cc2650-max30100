@@ -115,6 +115,18 @@ float max(float data[SIZE], int begin, int end) {
 	return m;
 }
 
+float average(float *data, int size) {
+    float sum;
+    int i;
+
+    sum = 0;
+    for (i = 0; i < size; i++) {
+        sum += data[i];
+    }
+
+    return sum / (float)size;
+}
+
 float heartrate(float data[SIZE]) {
 	bool peak;
 	int beats;
@@ -166,6 +178,67 @@ float heartrate(float data[SIZE]) {
 
 	// offset to the right by 100 after dc filter => 10 seconds instead of 11
 	return (float)beats * 6000.0 / (float)(SIZE - 100);
+}
+
+float heartrate2(float data[SIZE]) {
+    bool peak;
+    int beats;
+    int i;
+    float threshold;
+    float beatTime[50];
+
+    peak = false;
+    beats = 0;
+
+    threshold = max(data, 100, 300) / 2.0; // multiplier should be tweaked depending on LED current
+
+    // offset to the right by 100 after dc filter
+    for (i = 100; i < 200; i++) {
+        if (!peak && data[i] > threshold) {
+            peak = true;
+            beatTime[beats] = (float)i / 100.0;
+            beats++;
+        }
+
+        if (peak && data[i] <= threshold) {
+            peak = false;
+        }
+    }
+
+    for (i = 200; i < SIZE - 100; i++) {
+        threshold = max(data, i - 100, i + 100) / 2.0;
+
+        if (!peak && data[i] > threshold) {
+            peak = true;
+            beatTime[beats] = (float)i / 100.0;
+            beats++;
+        }
+
+        if (peak && data[i] <= threshold) {
+            peak = false;
+        }
+    }
+
+    threshold = max(data, SIZE - 200, SIZE) / 2.0;
+
+    for (i = SIZE - 100; i < SIZE; i++) {
+        if (!peak && data[i] > threshold) {
+            peak = true;
+            beatTime[beats] = (float)i / 100.0;
+            beats++;
+        }
+
+        if (peak && data[i] <= threshold) {
+            peak = false;
+        }
+    }
+
+    for (i = 0; i < beats - 1; i++) {
+        beatTime[i] = beatTime[i+1] - beatTime[i];
+        beatTime[i] = 60.0 / beatTime[i];
+    }
+
+    return average(beatTime, beats - 1);
 }
 
 float spo2(float dataIR[SIZE], float dataR[SIZE]) {
