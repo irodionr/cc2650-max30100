@@ -46,7 +46,9 @@ void threshold(float data[SIZE], float maxDiff) {
 void dc(float data[SIZE], float alpha) {
 	int i;
 	float w[SIZE];
-
+	
+	w[0] = 0;
+	
 	for (i = 1; i < SIZE; i++) {
 		w[i] = (float)data[i] + alpha*w[i-1];
 		data[i] = w[i] - w[i-1];
@@ -90,12 +92,12 @@ void butterworth(float data[SIZE]) {
 	
 	v[0] = 0.0;
 	v[1] = 0.0;
-
+	
 	for (i = 0; i < SIZE; i++) {
 		v[0] = v[1];
-		// constants for cut-off frequency Fc = 10Hz
-		v[1] = (2.452372752527856026e-1 * data[i]) + (0.50952544949442879485 * v[0]);
-
+		// constants for cut-off frequency Fc = 4Hz
+		v[1] = (1.121602444751934047e-1 * data[i]) + (0.77567951104961319064 * v[0]);
+		
 		data[i] = v[0] + v[1];
 	}
 }
